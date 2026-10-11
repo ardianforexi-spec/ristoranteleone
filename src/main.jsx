@@ -14,7 +14,7 @@ const languageCopy = {
   de: {
     nav: ['Über uns', 'Speisekarte', 'Kontakt'],
     heroLead:
-      'Italienische Küche mit mediterraner Seele, ausgewählte regionale Spezialitäten und eine warme Atmosphäre nahe Friedrichshafen.',
+      'Italienische Küche mit mediterraner Seele, schwäbische Küche, ausgewählte regionale Spezialitäten und eine warme Atmosphäre nahe Friedrichshafen.',
     reserve: 'Tisch reservieren',
     call: 'Jetzt anrufen',
     panelFood: 'Italienisch, Pizza, mediterran und schwäbische Spezialitäten',
@@ -56,7 +56,7 @@ const languageCopy = {
   en: {
     nav: ['About us', 'Menu', 'Contact'],
     heroLead:
-      'Italian cuisine with a Mediterranean soul, regional specialties and a warm atmosphere near Friedrichshafen.',
+      'Italian cuisine with a Mediterranean soul, Swabian dishes, regional specialties and a warm atmosphere near Friedrichshafen.',
     reserve: 'Book a table',
     call: 'Call us',
     panelFood: 'Italian, pizza, Mediterranean and Swabian specialties',
@@ -97,7 +97,7 @@ const languageCopy = {
   it: {
     nav: ['Chi siamo', 'Menù', 'Contatti'],
     heroLead:
-      'Cucina italiana dal cuore mediterraneo, specialità regionali e un’atmosfera accogliente vicino a Friedrichshafen.',
+      'Cucina italiana dal cuore mediterraneo, specialità sveve e regionali, in un’atmosfera accogliente vicino a Friedrichshafen.',
     reserve: 'Prenota un tavolo',
     call: 'Chiamaci',
     panelFood: 'Specialità italiane, pizza, cucina mediterranea e sveva',
