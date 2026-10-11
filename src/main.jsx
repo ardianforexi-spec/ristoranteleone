@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ArrowRight, Clock, Mail, MapPin, Phone, Search, Star, Utensils, Wine } from 'lucide-react';
 import './styles.css';
@@ -10,34 +10,158 @@ const contact = {
   address: 'Hauptstraße 136, 88074 Meckenbeuren',
 };
 
-const copy = {
-  nav: ['Über uns', 'Speisekarte', 'Kontakt'],
-  heroLead:
-    'Italienische Küche mit mediterraner Seele, ausgewählte regionale Spezialitäten und eine warme Atmosphäre nahe Friedrichshafen.',
-  reserve: 'Tisch reservieren',
-  call: 'Jetzt anrufen',
-  panelFood: 'Italienisch, Pizza, mediterran und schwäbische Spezialitäten',
-  historyLabel: 'Geschichte',
-  aboutTitle: 'Italienische Gastlichkeit am Bodensee',
-  aboutOne:
-    'Das Ristorante Pizzeria Leone liegt an der Hauptstraße 136 in Meckenbeuren, in der Nähe des Hotel Löwen und nur wenige Minuten von Friedrichshafen entfernt.',
-  aboutTwo:
-    'Alle Gerichte, Kroketten, Maultaschen, Spätzle, Soßen und Dressings werden frisch und hausgemacht zubereitet. Jede Pizza und jedes Ofengericht wird mit Mozzarella verfeinert.',
-  menuLabel: 'Speisekarte',
-  menuTitle: 'Unsere komplette Speisekarte',
-  menuText:
-    'Wählen Sie eine Kategorie oder suchen Sie direkt nach Ihrem Lieblingsgericht. Extra Zutaten bei allen Gerichten: 1,50 EUR bis 2,00 EUR.',
-  search: 'Gericht suchen',
-  contactLabel: 'Kontakt',
-  contactTitle: 'Reservieren oder direkt anfragen',
-  contactText:
-    'Für Reservierungen, Gruppenanfragen oder kurze Rückfragen erreichen Sie das Team direkt per Telefon oder E-Mail.',
-  mapTitle: 'Anfahrt',
-  addressLabel: 'Adresse',
-  phoneLabel: 'Telefon',
-  emailLabel: 'E-Mail',
-  emailCta: 'Reservierung per E-Mail',
-  phoneCta: 'Telefonisch kontaktieren',
+const languageCopy = {
+  de: {
+    nav: ['Über uns', 'Speisekarte', 'Kontakt'],
+    heroLead:
+      'Italienische Küche mit mediterraner Seele, ausgewählte regionale Spezialitäten und eine warme Atmosphäre nahe Friedrichshafen.',
+    reserve: 'Tisch reservieren',
+    call: 'Jetzt anrufen',
+    panelFood: 'Italienisch, Pizza, mediterran und schwäbische Spezialitäten',
+    openingHours: 'Mo-Sa 17:30-22:00, So 11:30-14:00 & 17:30-22:00',
+    aboutLabel: 'Geschichte',
+    aboutTitle: 'Italienische Gastlichkeit am Bodensee',
+    aboutOne:
+      'Das Ristorante Pizzeria Leone liegt an der Hauptstraße 136 in Meckenbeuren, in der Nähe des Hotel Löwen und nur wenige Minuten von Friedrichshafen entfernt.',
+    aboutTwo:
+      'Alle Gerichte, Kroketten, Maultaschen, Spätzle, Soßen und Dressings werden frisch und hausgemacht zubereitet. Jede Pizza und jedes Ofengericht wird mit Mozzarella verfeinert.',
+    menuLabel: 'Speisekarte',
+    menuTitle: 'Unsere komplette Speisekarte',
+    menuText:
+      'Wählen Sie eine Kategorie oder suchen Sie direkt nach Ihrem Lieblingsgericht. Extra Zutaten bei allen Gerichten: 1,50 EUR bis 2,00 EUR.',
+    search: 'Gericht suchen',
+    menuFeature: 'Leone Auswahl',
+    menuFeatureTitle: (count) => `${count} Gerichte und Getränke auf einen Blick`,
+    menuFeatureText:
+      'Pizza mit Mozzarella, hausgemachte Spätzle und Maultaschen, frische Soßen, regionale Klassiker und italienische Lieblingsgerichte.',
+    contactLabel: 'Kontakt',
+    contactTitle: 'Reservieren oder direkt anfragen',
+    contactText:
+      'Für Reservierungen, Gruppenanfragen oder kurze Rückfragen erreichen Sie das Team direkt per Telefon oder E-Mail.',
+    mapTitle: 'Anfahrt',
+    mapFrameTitle: 'Karte mit dem Standort des Ristorante Pizzeria Leone',
+    addressLabel: 'Adresse',
+    phoneLabel: 'Telefon',
+    emailLabel: 'E-Mail',
+    emailCta: 'Reservierung per E-Mail',
+    phoneCta: 'Telefonisch kontaktieren',
+    googleMaps: 'Google Maps',
+    noResults: 'Keine Gerichte gefunden.',
+    items: (count) => `${count} Positionen`,
+    badges: { Empfehlung: 'Empfehlung', Gästeliebling: 'Gästeliebling' },
+    reservationSubject: 'Reservierungsanfrage - Ristorante Leone',
+    reservationBody:
+      'Guten Tag Ristorante Leone,\n\nich möchte gerne einen Tisch reservieren.\n\nName:\nDatum:\nUhrzeit:\nPersonen:\nTelefon:\n\nVielen Dank!',
+  },
+  en: {
+    nav: ['About us', 'Menu', 'Contact'],
+    heroLead:
+      'Italian cuisine with a Mediterranean soul, regional specialties and a warm atmosphere near Friedrichshafen.',
+    reserve: 'Book a table',
+    call: 'Call us',
+    panelFood: 'Italian, pizza, Mediterranean and Swabian specialties',
+    openingHours: 'Mon-Sat 5:30-10:00 pm, Sun 11:30 am-2:00 pm & 5:30-10:00 pm',
+    aboutLabel: 'Our story',
+    aboutTitle: 'Italian hospitality on Lake Constance',
+    aboutOne:
+      'Ristorante Pizzeria Leone is at Hauptstraße 136 in Meckenbeuren, near Hotel Löwen and just a few minutes from Friedrichshafen.',
+    aboutTwo:
+      'Our dishes, croquettes, Maultaschen, Spätzle, sauces and dressings are freshly prepared in-house. Every pizza and oven-baked dish is finished with mozzarella.',
+    menuLabel: 'Menu',
+    menuTitle: 'Our full menu',
+    menuText:
+      'Choose a category or search for your favourite dish. Extra toppings for all dishes: EUR 1.50 to EUR 2.00.',
+    search: 'Search dishes',
+    menuFeature: 'Leone selection',
+    menuFeatureTitle: (count) => `${count} dishes and drinks to explore`,
+    menuFeatureText:
+      'Mozzarella pizza, homemade Spätzle and Maultaschen, fresh sauces, regional classics and Italian favourites.',
+    contactLabel: 'Contact',
+    contactTitle: 'Book a table or get in touch',
+    contactText: 'For reservations, group bookings or questions, contact our team by phone or email.',
+    mapTitle: 'Find us',
+    mapFrameTitle: 'Map showing the location of Ristorante Pizzeria Leone',
+    addressLabel: 'Address',
+    phoneLabel: 'Phone',
+    emailLabel: 'Email',
+    emailCta: 'Reserve by email',
+    phoneCta: 'Call the restaurant',
+    googleMaps: 'Google Maps',
+    noResults: 'No dishes found.',
+    items: (count) => `${count} items`,
+    badges: { Empfehlung: 'Recommended', Gästeliebling: 'Guest favourite' },
+    reservationSubject: 'Table reservation - Ristorante Leone',
+    reservationBody:
+      'Hello Ristorante Leone,\n\nI would like to reserve a table.\n\nName:\nDate:\nTime:\nNumber of guests:\nPhone:\n\nThank you!',
+  },
+  it: {
+    nav: ['Chi siamo', 'Menù', 'Contatti'],
+    heroLead:
+      'Cucina italiana dal cuore mediterraneo, specialità regionali e un’atmosfera accogliente vicino a Friedrichshafen.',
+    reserve: 'Prenota un tavolo',
+    call: 'Chiamaci',
+    panelFood: 'Specialità italiane, pizza, cucina mediterranea e sveva',
+    openingHours: 'Lun-Sab 17:30-22:00, Dom 11:30-14:00 e 17:30-22:00',
+    aboutLabel: 'La nostra storia',
+    aboutTitle: 'Ospitalità italiana sul Lago di Costanza',
+    aboutOne:
+      'Il Ristorante Pizzeria Leone si trova in Hauptstraße 136 a Meckenbeuren, vicino all’Hotel Löwen e a pochi minuti da Friedrichshafen.',
+    aboutTwo:
+      'I nostri piatti, le crocchette, i Maultaschen, gli Spätzle, le salse e i condimenti sono preparati freschi in casa. Ogni pizza e piatto al forno è arricchito con mozzarella.',
+    menuLabel: 'Menù',
+    menuTitle: 'Il nostro menù completo',
+    menuText:
+      'Scegli una categoria o cerca il tuo piatto preferito. Ingredienti extra per tutti i piatti: da 1,50 EUR a 2,00 EUR.',
+    search: 'Cerca un piatto',
+    menuFeature: 'La selezione Leone',
+    menuFeatureTitle: (count) => `${count} piatti e bevande da scoprire`,
+    menuFeatureText:
+      'Pizza con mozzarella, Spätzle e Maultaschen fatti in casa, salse fresche, classici regionali e specialità italiane.',
+    contactLabel: 'Contatti',
+    contactTitle: 'Prenota o contattaci',
+    contactText: 'Per prenotazioni, gruppi o informazioni, contatta il nostro team per telefono o e-mail.',
+    mapTitle: 'Dove siamo',
+    mapFrameTitle: 'Mappa con la posizione del Ristorante Pizzeria Leone',
+    addressLabel: 'Indirizzo',
+    phoneLabel: 'Telefono',
+    emailLabel: 'E-mail',
+    emailCta: 'Prenota via e-mail',
+    phoneCta: 'Chiama il ristorante',
+    googleMaps: 'Google Maps',
+    noResults: 'Nessun piatto trovato.',
+    items: (count) => `${count} proposte`,
+    badges: { Empfehlung: 'Consigliato', Gästeliebling: 'Preferito dagli ospiti' },
+    reservationSubject: 'Richiesta di prenotazione - Ristorante Leone',
+    reservationBody:
+      'Buongiorno Ristorante Leone,\n\ndesidero prenotare un tavolo.\n\nNome:\nData:\nOrario:\nNumero di persone:\nTelefono:\n\nGrazie!',
+  },
+};
+
+const sectionTranslations = {
+  en: {
+    vorspeisen: ['Starters & salads', 'A selection of hot and cold Leone kitchen starters.'],
+    suppen: ['Soups', 'Homemade soups to start your meal.'],
+    salate: ['Salads', 'Fresh salad plates with homemade dressing.'],
+    pasta: ['Pasta & oven-baked dishes', 'Pasta, lasagne, cannelloni and baked specialties.'],
+    fisch: ['Fish dishes', 'Mediterranean fish and seafood.'],
+    grill: ['From the grill, pan & pot', 'Pork, beef, veal and chicken.'],
+    schwaebisch: ['Swabian classics & light meals', 'Fresh, homemade regional cuisine.'],
+    pizza: ['Pizza', 'Every pizza is prepared with mozzarella.'],
+    'kinder-dessert': ['Children’s dishes & desserts', 'For younger guests and a sweet finish.'],
+    getraenke: ['Drinks, wine & beer', 'Hot and cold drinks, wine, aperitifs, spirits and beer.'],
+  },
+  it: {
+    vorspeisen: ['Antipasti e insalate', 'Antipasti caldi e freddi della cucina Leone.'],
+    suppen: ['Zuppe', 'Zuppe fatte in casa per iniziare il pasto.'],
+    salate: ['Insalate', 'Insalate fresche con condimento fatto in casa.'],
+    pasta: ['Pasta e piatti al forno', 'Pasta, lasagne, cannelloni e specialità gratinate.'],
+    fisch: ['Piatti di pesce', 'Pesce e frutti di mare preparati alla mediterranea.'],
+    grill: ['Alla griglia, in padella e in pentola', 'Maiale, manzo, vitello e pollo.'],
+    schwaebisch: ['Classici svevi e piatti rustici', 'Cucina regionale fresca e fatta in casa.'],
+    pizza: ['Pizza', 'Ogni pizza è preparata con mozzarella.'],
+    'kinder-dessert': ['Piatti per bambini e dessert', 'Per i più piccoli e per concludere in dolcezza.'],
+    getraenke: ['Bevande, vino e birra', 'Bevande calde e fredde, vini, aperitivi, liquori e birra.'],
+  },
 };
 
 const menuSections = [
@@ -236,9 +360,30 @@ const menuSections = [
 ];
 
 const gallery = [
-  { src: '/images/restaurant-interior-1.jpg', alt: 'Gastraum des Ristorante Pizzeria Leone' },
-  { src: '/images/restaurant-interior-2.jpg', alt: 'Sitzbereich im Ristorante Pizzeria Leone' },
-  { src: '/images/restaurant-interior-3.jpg', alt: 'Innenansicht des Ristorante Pizzeria Leone' },
+  {
+    src: '/images/restaurant-interior-1.jpg',
+    alt: {
+      de: 'Gastraum des Ristorante Pizzeria Leone',
+      en: 'Dining room at Ristorante Pizzeria Leone',
+      it: 'Sala del Ristorante Pizzeria Leone',
+    },
+  },
+  {
+    src: '/images/restaurant-interior-2.jpg',
+    alt: {
+      de: 'Sitzbereich im Ristorante Pizzeria Leone',
+      en: 'Seating area at Ristorante Pizzeria Leone',
+      it: 'Area con tavoli del Ristorante Pizzeria Leone',
+    },
+  },
+  {
+    src: '/images/restaurant-interior-3.jpg',
+    alt: {
+      de: 'Innenansicht des Ristorante Pizzeria Leone',
+      en: 'Interior of Ristorante Pizzeria Leone',
+      it: 'Interno del Ristorante Pizzeria Leone',
+    },
+  },
 ];
 
 function normalize(value) {
@@ -246,15 +391,23 @@ function normalize(value) {
 }
 
 function App() {
+  const [language, setLanguage] = useState(() => {
+    const savedLanguage = window.localStorage.getItem('leone-language');
+    return savedLanguage === 'en' || savedLanguage === 'it' ? savedLanguage : 'de';
+  });
   const [activeSection, setActiveSection] = useState(menuSections[0].id);
   const [query, setQuery] = useState('');
-  const reservationSubject = encodeURIComponent('Reservierung Anfrage - Ristorante Leone');
-  const reservationBody = encodeURIComponent(
-    'Guten Tag Ristorante Leone,\n\nich möchte gerne einen Tisch reservieren.\n\nName:\nDatum:\nUhrzeit:\nPersonen:\nTelefon:\n\nVielen Dank!'
-  );
+  const copy = languageCopy[language];
+  const reservationSubject = encodeURIComponent(copy.reservationSubject);
+  const reservationBody = encodeURIComponent(copy.reservationBody);
   const mailHref = `mailto:${contact.email}?subject=${reservationSubject}&body=${reservationBody}`;
   const mapQuery = encodeURIComponent(`Ristorante Pizzeria Leone, ${contact.address}`);
   const totalItems = menuSections.reduce((sum, section) => sum + section.items.length, 0);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+    window.localStorage.setItem('leone-language', language);
+  }, [language]);
 
   const visibleSections = useMemo(() => {
     const cleanQuery = normalize(query.trim());
@@ -282,6 +435,23 @@ function App() {
           <a href="#about">{copy.nav[0]}</a>
           <a href="#menu">{copy.nav[1]}</a>
           <a href="#contact">{copy.nav[2]}</a>
+        </div>
+        <div
+          className="navTools"
+          aria-label={{ de: 'Sprache wählen', en: 'Choose language', it: 'Seleziona la lingua' }[language]}
+        >
+          {['de', 'en', 'it'].map((option) => (
+            <button
+              key={option}
+              type="button"
+              className={`lang${language === option ? ' active' : ''}`}
+              aria-pressed={language === option}
+              aria-label={{ de: 'Deutsch', en: 'English', it: 'Italiano' }[option]}
+              onClick={() => setLanguage(option)}
+            >
+              {option.toUpperCase()}
+            </button>
+          ))}
         </div>
         <a className="iconButton" href={`tel:${contact.phoneHref}`} aria-label={copy.call}>
           <Phone size={19} />
@@ -312,7 +482,7 @@ function App() {
           </div>
           <div>
             <Clock size={18} />
-            <span>Mo-Sa 17:30-22:00, So 11:30-14:00 & 17:30-22:00</span>
+            <span>{copy.openingHours}</span>
           </div>
         </div>
       </section>
@@ -320,7 +490,7 @@ function App() {
       <section id="about" className="section about">
         <div className="sectionIntro">
           <p className="eyebrow dark">
-            <Wine size={16} /> {copy.historyLabel}
+            <Wine size={16} /> {copy.aboutLabel}
           </p>
           <h2>{copy.aboutTitle}</h2>
           <p>{copy.aboutOne}</p>
@@ -328,7 +498,7 @@ function App() {
         </div>
         <div className="aboutGrid">
           {gallery.map(({ src, alt }) => (
-            <img key={src} src={src} alt={alt} />
+            <img key={src} src={src} alt={alt[language]} />
           ))}
         </div>
       </section>
@@ -344,7 +514,7 @@ function App() {
           <p>{copy.menuText}</p>
         </div>
 
-        <div className="menuToolbar" aria-label="Speisekarte Filter">
+        <div className="menuToolbar" aria-label={copy.menuLabel}>
           <div className="searchBox">
             <Search size={18} />
             <input
@@ -363,7 +533,7 @@ function App() {
                 className={activeSection === section.id ? 'active' : ''}
                 onClick={() => setActiveSection(section.id)}
               >
-                {section.title}
+                {sectionTranslations[language]?.[section.id]?.[0] ?? section.title}
               </button>
             ))}
           </div>
@@ -371,30 +541,31 @@ function App() {
 
         <div className="menuBoard full">
           <aside className="menuFeature">
-            <span>Leone Auswahl</span>
-            <h3>{totalItems} Gerichte und Getränke auf einen Blick</h3>
-            <p>
-              Pizza mit Mozzarella, hausgemachte Spätzle und Maultaschen, frische Soßen, regionale Klassiker und
-              italienische Lieblingsgerichte.
-            </p>
+            <span>{copy.menuFeature}</span>
+            <h3>{copy.menuFeatureTitle(totalItems)}</h3>
+            <p>{copy.menuFeatureText}</p>
             <img
               src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&w=900&q=85"
-              alt="Italienische Speisen auf einem Tisch"
+              alt={{
+                de: 'Italienische Speisen auf einem Tisch',
+                en: 'Italian dishes served at a table',
+                it: 'Piatti italiani serviti a tavola',
+              }[language]}
             />
           </aside>
 
           <div className="menuCatalog" aria-live="polite">
             {visibleSections.length === 0 ? (
-              <p className="emptyMenu">Keine Gerichte gefunden.</p>
+              <p className="emptyMenu">{copy.noResults}</p>
             ) : (
               visibleSections.map((section) => (
                 <article className="menuCategory" key={section.id}>
                   <header>
                     <div>
-                      <span>{section.items.length} Positionen</span>
-                      <h3>{section.title}</h3>
+                      <span>{copy.items(section.items.length)}</span>
+                      <h3>{sectionTranslations[language]?.[section.id]?.[0] ?? section.title}</h3>
                     </div>
-                    <p>{section.note}</p>
+                    <p>{sectionTranslations[language]?.[section.id]?.[1] ?? section.note}</p>
                   </header>
                   <div className="menuRows">
                     {section.items.map(([number, name, description, price, badge]) => (
@@ -402,7 +573,7 @@ function App() {
                         <div className="dishText">
                           <h4>
                             {name}
-                            {badge ? <em>{badge}</em> : null}
+                            {badge ? <em>{copy.badges[badge] ?? badge}</em> : null}
                           </h4>
                           <p>{description}</p>
                         </div>
@@ -457,10 +628,10 @@ function App() {
           <div className="mapCard">
             <div className="mapHeader">
               <span>{copy.mapTitle}</span>
-              <a href={`https://maps.google.com/?q=${mapQuery}`}>Google Maps</a>
+              <a href={`https://maps.google.com/?q=${mapQuery}`}>{copy.googleMaps}</a>
             </div>
             <iframe
-              title="Ristorante Pizzeria Leone map"
+              title={copy.mapFrameTitle}
               src={`https://www.google.com/maps?q=${mapQuery}&output=embed`}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
