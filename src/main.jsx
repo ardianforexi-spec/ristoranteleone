@@ -253,6 +253,7 @@ function App() {
     'Guten Tag Ristorante Leone,\n\nich möchte gerne einen Tisch reservieren.\n\nName:\nDatum:\nUhrzeit:\nPersonen:\nTelefon:\n\nVielen Dank!'
   );
   const mailHref = `mailto:${contact.email}?subject=${reservationSubject}&body=${reservationBody}`;
+  const mapQuery = encodeURIComponent(`Ristorante Pizzeria Leone, ${contact.address}`);
   const totalItems = menuSections.reduce((sum, section) => sum + section.items.length, 0);
 
   const visibleSections = useMemo(() => {
@@ -425,7 +426,7 @@ function App() {
             <h2>{copy.contactTitle}</h2>
             <p>{copy.contactText}</p>
             <div className="contactList">
-              <a href={`https://maps.google.com/?q=${encodeURIComponent(contact.address)}`}>
+              <a href={`https://maps.google.com/?q=${mapQuery}`}>
                 <span>{copy.addressLabel}</span>
                 <strong>
                   <MapPin size={20} /> {contact.address}
@@ -456,11 +457,11 @@ function App() {
           <div className="mapCard">
             <div className="mapHeader">
               <span>{copy.mapTitle}</span>
-              <a href={`https://maps.google.com/?q=${encodeURIComponent(contact.address)}`}>Google Maps</a>
+              <a href={`https://maps.google.com/?q=${mapQuery}`}>Google Maps</a>
             </div>
             <iframe
               title="Ristorante Pizzeria Leone map"
-              src="https://www.google.com/maps?q=Hauptstrasse%20136%2C%2088074%20Meckenbeuren&output=embed"
+              src={`https://www.google.com/maps?q=${mapQuery}&output=embed`}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
