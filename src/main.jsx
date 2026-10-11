@@ -236,9 +236,9 @@ const menuSections = [
 ];
 
 const gallery = [
-  'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1100&q=85',
-  'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1100&q=85',
-  'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1100&q=85',
+  { src: '/images/restaurant-interior-1.jpg', alt: 'Gastraum des Ristorante Pizzeria Leone' },
+  { src: '/images/restaurant-interior-2.jpg', alt: 'Sitzbereich im Ristorante Pizzeria Leone' },
+  { src: '/images/restaurant-interior-3.jpg', alt: 'Innenansicht des Ristorante Pizzeria Leone' },
 ];
 
 function normalize(value) {
@@ -327,8 +327,8 @@ function App() {
           <p>{copy.aboutTwo}</p>
         </div>
         <div className="aboutGrid">
-          {gallery.map((src, index) => (
-            <img key={src} src={src} alt={`Atmosphäre im Ristorante Leone ${index + 1}`} />
+          {gallery.map(({ src, alt }) => (
+            <img key={src} src={src} alt={alt} />
           ))}
         </div>
       </section>
